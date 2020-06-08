@@ -1,0 +1,1 @@
+copy C:\Dev\performance\src\benchmarks\gc\src\analysis\managed-lib\GCPerf.csproj.nuget C:\Dev\performance\src\benchmarks\gc\src\analysis\managed-lib\GCPerf.csproj
