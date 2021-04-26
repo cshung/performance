@@ -803,4 +803,16 @@ dframe.groupby(["Number"]).mean()
 
 dframe[["Number", "AllocRateMBSec", "LOHSizeAfterMB", "LOHSizeBeforeMB"]].groupby("Number").mean()
 
-# %%
+#%% 
+_TRACE = get_trace_with_everything(Path("C:/GenAware/GenAware.yaml"))
+metrics_dict = {}
+metrics_dict["promoted_bytes"] = []
+for gc in _TRACE.gcs:
+    if gc.Generation == Gens.Gen0:
+        metrics_dict["promoted_bytes"].append(gc.unwrap_metric_from_name("PromotedMB"))
+    else:
+        # Just to make sure the x-axis corresponds to the GC index for filtering.
+        metrics_dict["promoted_bytes"].append(0)
+
+metrics_frame = pandas.DataFrame.from_dict(metrics_dict)
+metrics_frame.plot()

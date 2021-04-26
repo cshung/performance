@@ -1,0 +1,15 @@
+  \begin{eqnarray*}
+                                                                       E[\text{allocated in oh}] &=& \frac{\text{weight}_{\text{oh}}}{1000} \times E[\text{size}_{\text{oh}}] \times \text{number of allocations}                                                                                                                        \\
+                                                               \frac{\text{sohar}}{\text{lohar}} &=& \frac{E[\text{allocated in soh}]}{E[\text{allocated in loh}]} = \frac{E[\text{size}_{\text{soh}}] \times \text{weight}_{\text{soh}}}{E[\text{size}_{\text{loh}}] \times \text{weight}_{\text{loh}} }                                \\
+    \text{sohar} \times E[\text{size}_{\text{loh}}] \times \text{weight}_{\text{loh}} &=& \text{lohar} \times E[\text{size}_{\text{soh}}] \times \text{weight}_{\text{soh}}                                                                                                                                                              \\
+                                                                                                 &=& \text{lohar} \times E[\text{size}_{\text{soh}}] \times (1000 - \text{weight}_{\text{loh}} - \text{weight}_{\text{poh}})                                                                                                             \\
+                                                                                                 &=& \text{lohar} \times E[\text{size}_{\text{soh}}] \times 1000 - \text{lohar} \times E[\text{size}_{\text{soh}}] \times \text{weight}_{\text{loh}} - \text{lohar} \times E[\text{size}_{\text{soh}}] \times \text{weight}_{\text{poh}}
+  \end{eqnarray*}
+  \begin{eqnarray*}
+    \text{sohar} \times E[\text{size}_{\text{loh}}] \times \text{weight}_{\text{loh}} + \text{lohar} \times E[\text{size}_{\text{soh}}] \times \text{weight}_{\text{loh}} + \text{lohar} \times E[\text{size}_{\text{soh}}] \times \text{weight}_{\text{poh}} &=& \text{lohar} \times E[\text{size}_{\text{soh}}] \times 1000 \\
+    \text{sohar} \times E[\text{size}_{\text{poh}}] \times \text{weight}_{\text{poh}} + \text{pohar} \times E[\text{size}_{\text{soh}}] \times \text{weight}_{\text{loh}} + \text{pohar} \times E[\text{size}_{\text{soh}}] \times \text{weight}_{\text{poh}} &=& \text{pohar} \times E[\text{size}_{\text{soh}}] \times 1000
+  \end{eqnarray*}
+  \begin{eqnarray*}
+    (\text{sohar} \times E[\text{size}_{\text{loh}}] + \text{lohar} \times E[\text{size}_{\text{soh}}]) \times \text{weight}_{\text{loh}} + \text{lohar} \times E[\text{size}_{\text{soh}}] \times \text{weight}_{\text{poh}} &=& \text{lohar} \times E[\text{size}_{\text{soh}}] \times 1000 \\
+    \text{pohar} \times E[\text{size}_{\text{soh}}] \times \text{weight}_{\text{loh}} + (\text{sohar} \times E[\text{size}_{\text{poh}}]  + \text{pohar} \times E[\text{size}_{\text{soh}}]) \times \text{weight}_{\text{poh}} &=& \text{pohar} \times E[\text{size}_{\text{soh}}] \times 1000
+  \end{eqnarray*}

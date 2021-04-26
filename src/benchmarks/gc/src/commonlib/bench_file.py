@@ -24,7 +24,13 @@ from .collection_util import (
     optional_mapping,
 )
 from .option import map_option, non_null, optional_to_iter, option_or, option_or_3
-from .parse_and_serialize import HexInt, load_yaml, SerializeMappings, write_yaml_file
+from .parse_and_serialize import (
+    HexInt,
+    load_yaml,
+    SerializeMappings,
+    write_test_yaml_file,
+    write_yaml_file,
+)
 from .score_spec import ScoreSpec
 from .type_utils import (
     combine_dataclasses_with_optional_fields,
@@ -208,6 +214,7 @@ class ConfigOptions:
     complus_bgcmemgoal: Optional[int] = None
     complus_bgcmemgoalslack: Optional[int] = None
     complus_gcconcurrentfinalization: Optional[bool] = None
+    complus_gcregionsrange: Optional[int] = None
     container: Optional[TestConfigContainer] = None
     affinitize: Optional[bool] = None
     memory_load: Optional[MemoryLoadOptions] = None
@@ -374,6 +381,7 @@ class TestConfigCombinedWithCoreclr:
                     od("COMPlus_BGCMemGoal", cfg.complus_bgcmemgoal),
                     od("COMPlus_BGCMemGoalSlack", cfg.complus_bgcmemgoalslack),
                     ob("COMPLUS_GCConcurrentFinalization", cfg.complus_gcconcurrentfinalization),
+                    od("COMPlus_GCRegionsRange", cfg.complus_gcregionsrange),
                 )
             ),
         )
@@ -1322,6 +1330,7 @@ class TestPaths:
 
     def write_test_status(self, test_status: TestRunStatus) -> None:
         write_yaml_file(self.test_status_path, test_status)
+        # write_test_yaml_file(self.test_status_path, test_status)
 
 
 @with_slots

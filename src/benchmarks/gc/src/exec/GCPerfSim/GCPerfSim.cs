@@ -547,6 +547,8 @@ class SimpleRefPayLoad
         if (isPinned)
         {
             handle = GCHandle.Alloc(payload, GCHandleType.Pinned);
+            // There we go, the pinning life time is shortened!
+            handle.Free();
 #if DEBUG
             Interlocked.Increment(ref NumPinned);
 #endif
