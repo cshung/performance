@@ -928,6 +928,7 @@ def get_test_metrics_numbers_for_jupyter(
             run_metric_row: Dict[str, Any] = {}
             run_metric_row["config_name"] = t.config_name
             run_metric_row["benchmark_name"] = t.benchmark_name
+            run_metric_row["coreclr_name"] = t.coreclr_name
             run_metric_row["iteration_number"] = iter_num
 
             for iter_key, iter_value in iter_ok_result.items():
@@ -944,6 +945,7 @@ def get_test_metrics_numbers_for_jupyter(
                 gc_metric_row = gc.get_gc_metrics_values()
                 gc_metric_row["config_name"] = t.config_name
                 gc_metric_row["benchmark_name"] = t.benchmark_name
+                gc_metric_row["coreclr_name"] = t.coreclr_name
                 gc_metric_row["iteration_number"] = iter_num
                 pergc_metrics_by_row.append(gc_metric_row)
             iter_num += 1

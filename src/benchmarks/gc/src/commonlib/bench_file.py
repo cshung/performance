@@ -573,6 +573,7 @@ class AllocType(Enum):
 class TestKind(Enum):
     time = 0
     highSurvival = 1
+    markof = 2
 
 
 # Not documenting fields here as GCPerfSim should do that.

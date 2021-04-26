@@ -348,6 +348,7 @@ enum TestKind
 {
     time,
     highsurvival,
+    markof,
 }
 
 enum ItemType
@@ -1100,7 +1101,7 @@ class ArgsParser
         hi = ParseUInt32(parts[1]);
     }
 
-    private static readonly string[] testKindNames = new string[] { "time", "highSurvival" };
+    private static readonly string[] testKindNames = new string[] { "time", "highSurvival", "markof" };
     private static readonly string[] itemTypeNames = new string[] { "simple", "reference" };
 
     private static uint ParseUInt32(string s)
@@ -1622,6 +1623,12 @@ class ArgsParser
 
         BucketSpec[] buckets = bucketList.ToArray();
 
+        if (testKind == TestKind.markof)
+        {
+            // Please, the constructor of Phase just shutup
+            threadCount = 1;
+            allocPerThread = 1;
+        }
         Phase onlyPhase = new Phase(
             testKind: testKind,
             totalLiveBytes: livePerThread,
@@ -1956,6 +1963,12 @@ class MemoryAlloc
             case TestKind.highsurvival:
                 HighSurvivalTest();
                 break;
+            case TestKind.markof:
+                for (int i = 0; i < 100; i++)
+                {
+                    testMarkOF.Program.Bing(new string[0]);
+                }
+                break;
             default:
                 throw new InvalidOperationException();
         }
@@ -2107,6 +2120,11 @@ class MemoryAlloc
         if (curPhaseIndex < args.phases.Length)
         {
             curPhase = args.phases[curPhaseIndex];
+            // Yuck - we must do the above step to make curPhase happy.
+            if (curPhase.testKind == TestKind.markof)
+            {
+                return true;
+            }
             totalAllocBytesLeft = (long)curPhase.totalAllocBytes;
 
             bucketChooser = new BucketChooser(curPhase.buckets);
