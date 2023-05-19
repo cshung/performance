@@ -128,8 +128,8 @@ namespace GC.Infrastructure.Core.CommandBuilders
                 commandStringBuilder.Append($" --application.framework net8.0 ");
 
                 // Add name of output.
-                string outputExtenstion = os == OS.Windows ? "etl.zip" : "nettrace";
-                commandStringBuilder.Append($" --application.options.traceOutput {Path.Combine(configuration.Output.Path, run.Key, run.Key + "." + corerunOverride.Key + "." +  iterationIdx + "." + collectType + "." + outputExtenstion)} ");
+                string outputExtension = os == OS.Windows ? "etl.zip" : "nettrace";
+                commandStringBuilder.Append($" --application.options.traceOutput {Path.Combine(configuration.Output.Path, run.Key, run.Key + "." + corerunOverride.Key + "." +  iterationIdx + "." + collectType + "." + outputExtension)} ");
             }
 
             if (corerunOverride.Value.environment_variables != null)

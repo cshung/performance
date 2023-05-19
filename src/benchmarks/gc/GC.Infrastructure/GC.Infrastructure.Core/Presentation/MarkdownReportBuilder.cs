@@ -108,7 +108,7 @@ namespace GC.Infrastructure.Core.Presentation
             string containsLowMemoryContainer_GCPerfSim = cleanedGCPerfSimConfigurations.Contains("LowMemoryContainer") ? "x" : " ";
 
             // Microbenchmarks.
-            string containsServer_Microbenchmarks      = cleanedMicrobenchmarkConfigurations.Contains("Microbenchmrks_Server") ? "x" : " ";
+            string containsServer_Microbenchmarks      = cleanedMicrobenchmarkConfigurations.Contains("Microbenchmarks_Server") ? "x" : " ";
             string containsWorkstation_Microbenchmarks = cleanedGCPerfSimConfigurations.Contains("Microbenchmarks_Workstation") ? "x" : " ";
 
             // ASPNet Configurations.

@@ -137,7 +137,7 @@ namespace GC.Infrastructure.Commands.Microbenchmark
 
                 foreach (var run in configuration.Runs)
                 {
-                    AnsiConsole.Markup($"[bold green] ({DateTime.Now}) Running Microbechmarks: {configuration.Name} - {run.Key} {benchmark} [/]\n");
+                    AnsiConsole.Markup($"[bold green] ({DateTime.Now}) Running Microbenchmarks: {configuration.Name} - {run.Key} {benchmark} [/]\n");
                     string runPath = Path.Combine(configuration.Output.Path, run.Key);
 
                     // Create the run path directory.
@@ -195,7 +195,7 @@ namespace GC.Infrastructure.Commands.Microbenchmark
 
             IReadOnlyList<MicrobenchmarkComparisonResults> results = Presentation.Present(configuration, executionDetails);
             Directory.SetCurrentDirectory(currentDirectory);
-            AnsiConsole.Markup($"[bold green] ({DateTime.Now}) Wrote Microbechmark Results to: {Markup.Escape(Path.Combine(configuration.Output.Path, "Results.md"))} [/]");
+            AnsiConsole.Markup($"[bold green] ({DateTime.Now}) Wrote Microbenchmark Results to: {Markup.Escape(Path.Combine(configuration.Output.Path, "Results.md"))} [/]");
             return new MicrobenchmarkOutputResults(executionDetails, results);
         }
     }

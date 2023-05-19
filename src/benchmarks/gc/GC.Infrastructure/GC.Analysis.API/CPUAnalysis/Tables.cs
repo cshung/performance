@@ -90,7 +90,7 @@ namespace GC.Analysis.API
         {
             StringDataFrameColumn phaseName = new("Phases");
             DoubleDataFrameColumn baselineCounts = new(showInclusiveCount ? "Inclusive Count - Baseline" : "Exclusive Count - Baseline");
-            DoubleDataFrameColumn baselinPercentage = new("%");
+            DoubleDataFrameColumn baselinePercentage = new("%");
 
             Dictionary<string, double> phaseToPercentage = new();
             Dictionary<string, double> phaseToCount = new();
@@ -116,7 +116,7 @@ namespace GC.Analysis.API
                 baselineCounts.Append(phase.Value);
                 double percentage = DataFrameHelpers.Round2((phase.Value / total) * 100);
                 phaseToPercentage[phase.Key] = percentage;
-                baselinPercentage.Append(percentage);
+                baselinePercentage.Append(percentage);
             }
 
             List<DataFrameColumn> otherColumns = new();
@@ -160,7 +160,7 @@ namespace GC.Analysis.API
             List<DataFrameColumn> allColumns = new();
             allColumns.Add(phaseName);
             allColumns.Add(baselineCounts);
-            allColumns.Add(baselinPercentage);
+            allColumns.Add(baselinePercentage);
             allColumns.AddRange(otherColumns);
             return new DataFrame(allColumns);
         }

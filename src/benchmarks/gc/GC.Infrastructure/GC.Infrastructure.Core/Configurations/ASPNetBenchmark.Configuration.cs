@@ -41,7 +41,7 @@
             // Checks if mandatory arguments are specified in the configuration.
             if (configuration == null)
             {
-                throw new ArgumentNullException($"ASPNetBnechmarksConfigurationParser: {nameof(configuration)} is null. Check the syntax of the configuration.");
+                throw new ArgumentNullException($"ASPNetBenchmarksConfigurationParser: {nameof(configuration)} is null. Check the syntax of the configuration.");
             }
 
             return configuration;

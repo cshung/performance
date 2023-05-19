@@ -102,7 +102,7 @@ As an example, if you want to _just_ run the "System.IO.Tests.Perf_File.ReadAllB
 
 ###### Using Cached Invocation Counts
 
-The microbenchmarks run by the GC instructure must have the same invocation counts amongst the various comparative runs; this is important as we want to conduct an extremely fair comparison between the comparands. To ensure the same invocation counts are used amongst the runs, the value must be discerned before hand or in other words, we must do a dry run of the benchmark and parse the invocation count out of the results and then use that value while running it for the different microbenchmarks.
+The microbenchmarks run by the GC infrastructure must have the same invocation counts amongst the various comparative runs; this is important as we want to conduct an extremely fair comparison between the comparands. To ensure the same invocation counts are used amongst the runs, the value must be discerned before hand or in other words, we must do a dry run of the benchmark and parse the invocation count out of the results and then use that value while running it for the different microbenchmarks.
 
 To save time, you can pass in a "psv" file (the psv stands for pipe separated values) of the following format that contains the name of the benchmark and the invocation count that can be used. Without providing this file, the infrastructure will run the test run to discern the invocation count:
 

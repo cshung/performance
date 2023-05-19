@@ -38,7 +38,7 @@ namespace GC.Analysis.API
         private const string DEFAULT_SYMBOL_PATH = @";SRV*C:\Symbols*https://msdl.microsoft.com/download/symbols;SRV*C:\Symbols*https://nuget.smbsrc.net;SRV*C:\Symbols*https://referencesource.microsoft.com/symbols";
         private readonly TextWriter _symbolWriter;
 
-        public CPUAnalyzer(Analyzer analyzer, string yamlPath = "./DefaultMethods.yaml", string anaylsisLogFile = "", string symbolPath = "")
+        public CPUAnalyzer(Analyzer analyzer, string yamlPath = "./DefaultMethods.yaml", string analysisLogFile = "", string symbolPath = "")
         {
             Analyzer = analyzer;
 
@@ -51,9 +51,9 @@ namespace GC.Analysis.API
             Configuration         = deserializer.Deserialize<GCMethodsData>(configContents);
 
             _symbolWriter = TextWriter.Null; 
-            if (!string.IsNullOrEmpty(anaylsisLogFile))
+            if (!string.IsNullOrEmpty(analysisLogFile))
             {
-                _symbolWriter = new StreamWriter(anaylsisLogFile);
+                _symbolWriter = new StreamWriter(analysisLogFile);
             }
 
             if (!string.IsNullOrEmpty(symbolPath))
