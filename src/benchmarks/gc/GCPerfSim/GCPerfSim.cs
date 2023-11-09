@@ -11,7 +11,7 @@
 
 2) It includes different building blocks to simulate different relevant behaviors for GC, eg, survival rates,
    flat or pointer-rich object graphs, different SOH/LOH ratio.
-   
+
 The idea is when we see a relevant behavior we want this simulator to be able to generate that behavior but we
 also want to have a dial (ie, how intense that behavior is) and mix it with other behaviors.
 
@@ -19,8 +19,8 @@ Each run writes out a log named pid-output.txt that includes some general info s
 
 
 
-Right now it's fairly simple - during initialization it allocates an array that holds onto byte 
-arrays that are placed on SOH and LOH based on the alloc ratio given; and during steady state it 
+Right now it's fairly simple - during initialization it allocates an array that holds onto byte
+arrays that are placed on SOH and LOH based on the alloc ratio given; and during steady state it
 allocates byte arrays and survives based on survival intervals given.
 
 It has the following characteristics:
@@ -43,29 +43,29 @@ as an integer. For example you could specify "defArgName". That way you could re
     For "highsurvival", -totalMins should be set, -sohSurvInterval and -lohSurvInterval should not
 
 -threadCount/-tc: threadCount
-allocating thread count (usually I use half of the # of CPUs on the machine, this is just to reduce the OS scheduler effect 
+allocating thread count (usually I use half of the # of CPUs on the machine, this is just to reduce the OS scheduler effect
 so we can test the GC effect better)
 
 -lohAllocRatio/-lohar: lohAllocRatio
 LOH alloc ratio (this controls the bytes we allocate on LOH out of all allocations we do)
-It's in in per thousands (not percents! even though in the output it says %). So if it's 5, that means 
+It's in in per thousands (not percents! even though in the output it says %). So if it's 5, that means
 5‰ of the allocations will be on LOH.
 
 -pohAllocRatio/-pohar: pohAllocRatio
 (.NET 5.0 or later)
 POH alloc ratio (this controls the bytes we allocate on POH out of all allocations we do)
-It's in in per thousands (not percents! even though in the output it says %). So if it's 5, that means 
+It's in in per thousands (not percents! even though in the output it says %). So if it's 5, that means
 5‰ of the allocations will be on POH.
 
 -totalLiveGB/-tlgb: totalLiveBytesGB
 this is the total live data size in GB
 
 -totalAllocGB/-tagb: totalAllocBytesGB
-this is the total allocated size in GB, instead of accepting an arg like # of iterations where you don't really know what 
+this is the total allocated size in GB, instead of accepting an arg like # of iterations where you don't really know what
 an iteration does, we use the allocated bytes to indicate how much work the threads do.
 
 -requestAllocMB/-ramb: requestAllocBytes
-this is used to simulate "request processing" in servers. we allocate this much and keep a fraction of it live 
+this is used to simulate "request processing" in servers. we allocate this much and keep a fraction of it live
 until we've reached the total. Then we let go of all the objects allocated for this request. Multiple threads
 may be working in parallel on separate requests. The idea is to keep a certain amount of memory live for requests in flight.
 for the GC, this creates objects with an intermediate lifetime, so the percentage of surviving objects in gen 1 goes
@@ -86,11 +86,11 @@ meaning every Nth LOH object allocated during a request survives
 meaning every Nth POH object allocated during a request survives
 
 -totalMins/-tm: totalMinutesToRun
-time to run in minutes (for things that need long term effects like scheduling you want to run for 
+time to run in minutes (for things that need long term effects like scheduling you want to run for
 a while, eg, a few hours to see how stable it is)
 
 Note that if neither -totalAllocMB nor -totalMins is specified, it will run for the default for -totalMins.
-If both are specified, we take whichever one that's met first. 
+If both are specified, we take whichever one that's met first.
 
 -sohSizeRange/-sohsr: sohAllocLow, sohAllocHigh
 eg: -sohSizeRange 100-4000 will set sohAllocLow and sohAllocHigh to 100 and 4000
@@ -113,7 +113,7 @@ later. When the allocated objects are of similar sizes the surv rate is 1/sohSur
 to all be similar sizes.
 
 -lohSurvInterval/-lohsi: lohSurvInterval
-meaning every Nth LOH object allocated will survive. 
+meaning every Nth LOH object allocated will survive.
 
 -pohSurvInterval/-pohsi:
 (.NET 5.0 or later)
@@ -123,13 +123,13 @@ Note that -sohSurvInterval/-lohSurvInterval are only applicable for steady state
 During initialization everything survives.
 
 -sohPinningInterval/-sohpi: sohPinningInterval
-meaning every Nth SOH object survived will be pinned. 
+meaning every Nth SOH object survived will be pinned.
 
 -sohFinalizableInterval/-sohfi: sohFinalizableInterval
 meaning every Nth SOH object survived will be finalizable.
 
 -lohPinningInterval/-lohpi: lohPinningInterval
-meaning every Nth LOH object survived will be pinned. 
+meaning every Nth LOH object survived will be pinned.
 
 -lohFinalizableInterval/-lohfi: lohFinalizableInterval
 meaning every Nth LOH object survived will be finalizable.
@@ -139,7 +139,7 @@ meaning every Nth LOH object survived will be finalizable.
 meaning every Nth POH object survived will be finalizable.
 
 -allocType/-at: allocType
-What kind of objects are we allocating? Current supported types: 
+What kind of objects are we allocating? Current supported types:
 0 means SimpleItem - a byte array (implemented by the Item class)
 1 means ReferenceItem - contains refs and can form linked list (implemented by the ReferenceItemWithSize class)
 
@@ -166,19 +166,19 @@ The default for these args are specified in "Default parameters".
 
 Other things worth noting:
 
-1) There's also a lohPauseMeasure var that you could make into a config - for now I just always measure pauses for LOH 
+1) There's also a lohPauseMeasure var that you could make into a config - for now I just always measure pauses for LOH
    allocs (since it was used for measuring LOH alloc pause wrt BGC sweep).
 
-2) At the end of the test I do an EmptyWorkingSet - the reason for this is when I run the test in a loop if I don't 
+2) At the end of the test I do an EmptyWorkingSet - the reason for this is when I run the test in a loop if I don't
    empty the WS for an iteration it's common to observe that it heavily affects the beginning of the next iteration.
 
 
-For perf runs I usually run with GC internal logging on which means I'd want to get the last (in memory) part of the log 
-at the end. So this provides a config that make it convenient for that purpose by intentionally inducing an exception at 
+For perf runs I usually run with GC internal logging on which means I'd want to get the last (in memory) part of the log
+at the end. So this provides a config that make it convenient for that purpose by intentionally inducing an exception at
 the end so you can get the last part of the logging by setting this
 
-   for your post mortem debugging in the registry: 
-   under HKLM\Software\Microsoft\Windows NT\CurrentVersion\AeDebug 
+   for your post mortem debugging in the registry:
+   under HKLM\Software\Microsoft\Windows NT\CurrentVersion\AeDebug
    you can add a reg value called Debugger of REG_SZ type and it should be
    "d:\debuggers\amd64\windbg" -p %ld -e %ld -c ".jdinfo 0x%p; !DumpGCLog c:\temp;q"
    (obviously make sure the directory for windbg is correct for the machine you run the test on and
@@ -190,12 +190,12 @@ This is by default off and can be turned on via the -endException/-ee config.
 
 When working on this please KEEP THE FOLLOWING IN MIND:
 
-1) Do not use anything fancier than needed. In other words, use very simple code in this project. I am not against 
-   using cool/rich lang/framework features normally but for this purpose we want something that's as easy to reason about 
-   as possible, eg, using things like linq is forbidden because you don't know how much allocations/survivals it 
-   does and even if you do understand perfectly (which is doubtful) it might change and it's a burden for other 
-   people who need to work on this. 
-   
+1) Do not use anything fancier than needed. In other words, use very simple code in this project. I am not against
+   using cool/rich lang/framework features normally but for this purpose we want something that's as easy to reason about
+   as possible, eg, using things like linq is forbidden because you don't know how much allocations/survivals it
+   does and even if you do understand perfectly (which is doubtful) it might change and it's a burden for other
+   people who need to work on this.
+
 2) Clearly document your intentions for each building block you write. This is important for others because a building
    block is supposed to be easy to use so in general another person shouldn't need to understand how the code works
    in order to use it. For example, if a building block is supposed to allocate X bytes with Y links (where the user
@@ -485,7 +485,7 @@ class Item : ITypeWithPayload
         // We only support these 3 states right now.
         state = (isPinned ? ItemState.Pinned : (isWeakLong ? ItemState.WeakLong : ItemState.NoHandle));
 
-        // We can consider supporting multiple handles pointing to the same object. For now 
+        // We can consider supporting multiple handles pointing to the same object. For now
         // I am only doing at most one handle per item.
         if (isPinned || isWeakLong)
         {
@@ -620,7 +620,7 @@ enum ReferenceItemOperation
 };
 
 // ReferenceItem is structured this way so we can point to other
-// ReferenceItemWithSize objects on demand and record how much 
+// ReferenceItemWithSize objects on demand and record how much
 // memory it's holding alive.
 abstract class ReferenceItemWithSize : ITypeWithPayload
 {
@@ -1014,6 +1014,7 @@ readonly struct PerThreadArgs
     public readonly bool verifyLiveSize;
     public readonly uint printEveryNthIter;
     public readonly Phase[] phases;
+
     public PerThreadArgs(bool verifyLiveSize, uint printEveryNthIter, Phase[] phases)
     {
         this.verifyLiveSize = verifyLiveSize;
@@ -1239,13 +1240,15 @@ class Args
 {
     public readonly uint threadCount;
     public readonly PerThreadArgs perThreadArgs;
+    public readonly string? beginWithWait;
     public readonly bool finishWithFullCollect;
     public readonly bool endException;
 
-    public Args(uint threadCount, in PerThreadArgs perThreadArgs, bool finishWithFullCollect, bool endException)
+    public Args(uint threadCount, in PerThreadArgs perThreadArgs, bool finishWithFullCollect, bool endException, string? beginWithWait)
     {
         this.threadCount = threadCount;
         this.perThreadArgs = perThreadArgs;
+        this.beginWithWait = beginWithWait;
         this.finishWithFullCollect = finishWithFullCollect;
         this.endException = endException;
     }
@@ -1344,7 +1347,8 @@ class ArgsParser
                         printEveryNthIter: printEveryNthIter,
                         phases: phases),
                     finishWithFullCollect: false,
-                    endException: false);
+                    endException: false,
+                    beginWithWait: null);
             }
             CharSpan word = text.TakeWord();
             text.TakeSpace();
@@ -1641,6 +1645,7 @@ class ArgsParser
         ItemType allocType = ItemType.ReferenceItem;
         bool verifyLiveSize = false;
         uint printEveryNthIter = 0;
+        string? beginWithWait = null;
         bool finishWithFullCollect = false;
         uint compute = 0;
         bool endException = false;
@@ -1658,6 +1663,9 @@ class ArgsParser
                     // add some computation - the magic number below
                     // will reduce the allocation rate by a factor of 2-4
                     compute = 1000;
+                    break;
+                case "-beginWithWait":
+                    beginWithWait = args[++i];
                     break;
                 case "-finishWithFullCollect":
                     finishWithFullCollect = true;
@@ -1923,8 +1931,7 @@ class ArgsParser
         return new Args(
             threadCount: threadCount,
             perThreadArgs: new PerThreadArgs(verifyLiveSize: verifyLiveSize, printEveryNthIter: printEveryNthIter, phases: new Phase[] { onlyPhase }),
-            finishWithFullCollect: finishWithFullCollect,
-            endException: endException);
+            finishWithFullCollect: finishWithFullCollect, endException: endException, beginWithWait: beginWithWait);
     }
 }
 
@@ -2087,19 +2094,21 @@ class ThreadLauncher
 {
     readonly uint threadIndex;
     readonly PerThreadArgs perThreadArgs;
+    readonly ManualResetEvent threadReadyEvent;
     public MemoryAlloc? alloc; // To be created by the thread
 
     public MemoryAlloc Alloc => Util.NonNull(alloc);
 
-    public ThreadLauncher(uint threadIndex, in PerThreadArgs perThreadArgs)
+    public ThreadLauncher(uint threadIndex, in PerThreadArgs perThreadArgs, ManualResetEvent threadReadyEvent)
     {
         this.threadIndex = threadIndex;
         this.perThreadArgs = perThreadArgs;
+        this.threadReadyEvent = threadReadyEvent;
     }
 
     public void Run()
     {
-        alloc = new MemoryAlloc(threadIndex, perThreadArgs);
+        alloc = new MemoryAlloc(threadIndex, perThreadArgs, threadReadyEvent);
         alloc.RunTest();
     }
 }
@@ -2200,7 +2209,7 @@ class MemoryAlloc
     // private readonly bool printIterInfo = false;
     private BucketChooser bucketChooser;
 
-    // TODO: replace this with an array that records the 10 longest pauses 
+    // TODO: replace this with an array that records the 10 longest pauses
     // and pause buckets.
     public List<double> lohAllocPauses = new List<double>(10);
 
@@ -2209,13 +2218,16 @@ class MemoryAlloc
 
     int curPhaseIndex;
 
-    public MemoryAlloc(uint _threadIndex, in PerThreadArgs args)
+    ManualResetEvent threadReadyEvent;
+
+    public MemoryAlloc(uint _threadIndex, in PerThreadArgs args, ManualResetEvent threadReadyEvent)
     {
         rand = new Rand();
         threadIndex = _threadIndex;
 
         this.args = args;
         this.curPhaseIndex = -1;
+        this.threadReadyEvent = threadReadyEvent;
         this.GoToNextPhase();
     }
 
@@ -2279,7 +2291,7 @@ class MemoryAlloc
             "gen2",                  // 4
 
             "ms",                    // 5
-                                     // This size is what we get from GC.GetTotalMemory(false) so 
+                                     // This size is what we get from GC.GetTotalMemory(false) so
                                      // it's not the live data size. Change it to GC.GetTotalMemory(true)
                                      // if you want to make sure the live size is expected.
             "size(mb)"               // 6
@@ -2356,6 +2368,10 @@ class MemoryAlloc
 
         while (true)
         {
+            if (this.threadReadyEvent != null)
+            {
+                this.threadReadyEvent.WaitOne();
+            }
             if (threadIndex == 0 && Util.isNth(args.printEveryNthIter, n))
             {
                 long elapsedCurrentMS = stopwatchGlobal.ElapsedMilliseconds;
@@ -2512,8 +2528,8 @@ class MemoryAlloc
         //     stopwatch.Start();
         // }
 
-        // TODO: We should have a sequence number that just grows (since we only allocate sequentially on 
-        // the same thread anyway). This way we can use this number to indicate the ages of items. 
+        // TODO: We should have a sequence number that just grows (since we only allocate sequentially on
+        // the same thread anyway). This way we can use this number to indicate the ages of items.
         // If an item with a very current seq number points to an item with small seq number we can conclude
         // that we have young gen object pointing to a very old object. This can help us recognize things
         // like object locality, eg if demotion has demoted very old objects next to young objects.
@@ -2641,7 +2657,7 @@ class MemoryAlloc
     public static extern bool EmptyWorkingSet(IntPtr hProcess);
 #endif
 
-    static TestResult DoTest(in Args args, int currentPid)
+    static TestResult DoTest(in Args args, int currentPid, ManualResetEvent[] threadReadyEvents)
     {
         TestResult testResult = new TestResult();
         long tStart = Environment.TickCount;
@@ -2659,7 +2675,7 @@ class MemoryAlloc
 
                 for (uint i = 0; i < phase.threadCount; i++)
                 {
-                    threadLaunchers[i] = new ThreadLauncher(i, perThreadArgs);
+                    threadLaunchers[i] = new ThreadLauncher(i, perThreadArgs, threadReadyEvents[i]);
                     ThreadStart ts = new ThreadStart(threadLaunchers[i].Run);
                     threads[i] = new Thread(ts);
                 }
@@ -2685,7 +2701,7 @@ class MemoryAlloc
             else
             {
                 // Easier to debug without launching a separate thread
-                ThreadLauncher t = new ThreadLauncher(0, perThreadArgs);
+                ThreadLauncher t = new ThreadLauncher(0, perThreadArgs, threadReadyEvents[0]);
                 t.Run();
                 t.Alloc.PrintPauses();
 
@@ -2708,6 +2724,59 @@ class MemoryAlloc
         return testResult;
     }
 
+    private class AllocatingThreadsController
+    {
+        private ManualResetEvent[] threadReadyEvents;
+        private int ready;
+
+        internal AllocatingThreadsController(ManualResetEvent[] threadReadyEvents)
+        {
+            this.threadReadyEvents = threadReadyEvents;
+            this.ready = 0;
+        }
+
+        internal void OnFileCreated(object sender, FileSystemEventArgs e)
+        {
+            FileSystemWatcher watcher = (FileSystemWatcher)sender;
+            string fileName = e.FullPath;
+            this.WaitForFile(new FileInfo(fileName));
+            int newReady = int.Parse(File.ReadAllText(fileName));
+            File.Delete(fileName);
+            for (int i = newReady - 1; i >= ready; i--)
+            {
+                this.threadReadyEvents[i].Set();
+            }
+            for (int i = ready - 1; i >= newReady; i--)
+            {
+                this.threadReadyEvents[i].Reset();
+            }
+            Console.WriteLine($"Using {newReady} threads");
+            this.ready = newReady;
+        }
+
+        private void WaitForFile(FileInfo file)
+        {
+            FileStream? stream = null;
+            bool FileReady = false;
+            while(!FileReady)
+            {
+                try
+                {
+                    using(stream = file.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+                    {
+                        FileReady = true;
+                    }
+                }
+                catch (IOException)
+                {
+                    //File isn't ready yet, so we need to keep on waiting until it is.
+                }
+                //We'll want to wait a bit between polls, if the file isn't ready.
+                if(!FileReady) Thread.Sleep(1000);
+            }
+        }
+    }
+
     public static int Main(string[] argsStrs)
     {
         try
@@ -2715,7 +2784,21 @@ class MemoryAlloc
             Args args;
             args = ArgsParser.Parse(argsStrs);
 
-            TestResult testResult = MainInner(args);
+            ManualResetEvent[] threadReadyEvents = new ManualResetEvent[args.threadCount];
+
+            if (args.beginWithWait != null)
+            {
+                for (uint i = 0; i < args.threadCount; i++)
+                {
+                    threadReadyEvents[i] = new ManualResetEvent(false);
+                }
+                AllocatingThreadsController controller = new AllocatingThreadsController(threadReadyEvents);
+                string directoryPath = args.beginWithWait;
+                FileSystemWatcher watcher = new FileSystemWatcher(directoryPath);
+                watcher.Created += controller.OnFileCreated;
+                watcher.EnableRaisingEvents = true;
+            }
+            TestResult testResult = MainInner(args, threadReadyEvents);
 
             if (args.endException)
             {
@@ -2750,7 +2833,7 @@ class MemoryAlloc
         }
     }
 
-    public static TestResult MainInner(Args args)
+    public static TestResult MainInner(Args args, ManualResetEvent[] threadReadyEvents)
     {
         Console.WriteLine($"Running 64-bit? {Environment.Is64BitProcess}");
 
@@ -2761,7 +2844,7 @@ class MemoryAlloc
         stopwatch.Start();
 
         args.Describe();
-        TestResult result = DoTest(args, currentPid);
+        TestResult result = DoTest(args, currentPid, threadReadyEvents);
 
         stopwatch.Stop();
 
